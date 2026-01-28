@@ -1,0 +1,216 @@
+/* ===============================
+   PAGE LAYOUT
+================================ */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  padding: 20px;
+}
+
+/* ===============================
+   CARD
+================================ */
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+/* ===============================
+   TITLES
+================================ */
+
+.auth-title {
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: #737373;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+/* ===============================
+   FORM
+================================ */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ===============================
+   FIELD
+================================ */
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.auth-label img {
+  display: block;
+}
+
+/* ===============================
+   INPUTS
+================================ */
+
+.auth-input {
+  padding: 12px 14px;
+  border: 1.5px solid #e5e5e5;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.auth-input:focus {
+  border-color: #667eea;
+}
+
+/* ===============================
+   PASSWORD FIELD
+================================ */
+
+.auth-password-wrapper {
+  position: relative;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #737373;
+}
+
+.auth-password-toggle:hover {
+  color: #1a1a1a;
+}
+
+/* ===============================
+   OPTIONS
+================================ */
+
+.auth-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ===============================
+   CHECKBOX
+================================ */
+
+.auth-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-checkbox input {
+  accent-color: #667eea;
+}
+
+.auth-checkbox-label {
+  font-size: 14px;
+  color: #525252;
+}
+
+/* ===============================
+   LINKS
+================================ */
+
+.auth-link-small {
+  font-size: 14px;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-link-small:hover {
+  text-decoration: underline;
+}
+
+/* ===============================
+   BUTTON
+================================ */
+
+.auth-btn {
+  padding: 14px;
+  border: none;
+  background: #667eea;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.auth-btn:hover {
+  background: #5568d3;
+}
+
+/* ===============================
+   FOOTER
+================================ */
+
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #525252;
+}
+
+.auth-link {
+  color: #667eea;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 520px) {
+  .auth-card {
+    padding: 30px 22px;
+  }
+
+  .auth-title {
+    font-size: 26px;
+  }
+}

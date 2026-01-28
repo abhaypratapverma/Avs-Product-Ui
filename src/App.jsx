@@ -1,16 +1,10 @@
-import { Router } from "react-router-dom";
+import { Routes } from "react-router-dom";
 import "./App.css";
 
-import AuthRoutes from "./auth/routes/authRoutes";
+import AuthRoutes from "./auth/routes/AuthRoutes";
 
 function App() {
-  return (
-    <>
-      <Router>
-        <AuthRoutes />
-      </Router>
-    </>
-  );
+  return <Routes>{AuthRoutes()}</Routes>;
 }
 
 export default App;
