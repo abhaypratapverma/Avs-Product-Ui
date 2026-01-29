@@ -47,133 +47,156 @@ const SignUp = () => {
 
   return (
     <div className="auth-page">
-      <div className="auth-background-pattern" />
+      {/* Left Side - Animated Logo Section */}
+      <div className="auth-left-section">
+        <div className="auth-logo-container">
+          <div className="auth-logo-wrapper">
+            <div className="auth-logo-circle auth-logo-circle-1"></div>
+            <div className="auth-logo-circle auth-logo-circle-2"></div>
+            <div className="auth-logo-circle auth-logo-circle-3"></div>
+            <div className="auth-logo-text">AVS</div>
+          </div>
+          <h1 className="auth-brand-title">Join Us Today</h1>
+          <p className="auth-brand-subtitle">Create your account and start your journey with us</p>
+        </div>
+        
+        {/* Animated Background Elements */}
+        <div className="auth-bg-shapes">
+          <div className="auth-shape auth-shape-1"></div>
+          <div className="auth-shape auth-shape-2"></div>
+          <div className="auth-shape auth-shape-3"></div>
+        </div>
+      </div>
 
-      <div className="auth-card">
-        <h2 className="auth-title">Create Account</h2>
-        <p className="auth-subtitle">Start your shopping journey today</p>
-
-        <form className="auth-form" onSubmit={handleSubmit}>
-          
-          {/* Name */}
-          <div className="auth-field">
-            <label className="auth-label">
-              <img src={userIcon} width="16" height="16" alt="" />
-              Full Name
-            </label>
-
-            <Input
-              type="text"
-              name="name"
-              placeholder="John Doe"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
+      {/* Right Side - Form Section */}
+      <div className="auth-right-section">
+        <div className="auth-form-container">
+          <div className="auth-form-header">
+            <h2 className="auth-title">Create Account</h2>
+            <p className="auth-subtitle">Fill in your details to get started</p>
           </div>
 
-          {/* Email */}
-          <div className="auth-field">
-            <label className="auth-label">
-              <img src={emailIcon} width="16" height="16" alt="" />
-              Email Address
-            </label>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            
+            {/* Name */}
+            <div className="auth-field">
+              <label className="auth-label">
+                <img src={userIcon} width="16" height="16" alt="" />
+                Full Name
+              </label>
 
-            <Input
-              type="email"
-              name="email"
-              placeholder="you@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          {/* Password */}
-          <div className="auth-field">
-            <label className="auth-label">
-              <img src={passwordIcon} width="16" height="16" alt="" />
-              Password
-            </label>
-
-            <div className="auth-password-wrapper">
               <Input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Create a strong password"
-                value={formData.password}
+                type="text"
+                name="name"
+                placeholder="John Doe"
+                value={formData.name}
                 onChange={handleChange}
                 required
               />
-
-              <button
-                type="button"
-                className="auth-password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                <img
-                  src={showPassword ? eyeCloseIcon : eyeOpenIcon}
-                  width="20"
-                  height="20"
-                  alt=""
-                />
-              </button>
             </div>
 
-            {passwordLength > 0 && (
-              <div className="auth-password-strength">
-                <div className="auth-password-strength-bar">
-                  <div className={`auth-password-strength-fill ${strength}`} />
-                </div>
-                <span>{strength}</span>
-              </div>
-            )}
-          </div>
+            {/* Email */}
+            <div className="auth-field">
+              <label className="auth-label">
+                <img src={emailIcon} width="16" height="16" alt="" />
+                Email Address
+              </label>
 
-          {/* Terms */}
-          <div className="auth-terms">
-            <label className="auth-checkbox">
-              <input
-                type="checkbox"
-                checked={agreedToTerms}
-                onChange={(e) => setAgreedToTerms(e.target.checked)}
+              <Input
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
               />
-              <span className="auth-checkbox-checkmark" />
-              <span>
-                I agree to the{" "}
-                <span
-                  className="auth-link-inline"
-                  onClick={() => navigate("/terms")}
-                  style={{ cursor: "pointer" }}
+            </div>
+
+            {/* Password */}
+            <div className="auth-field">
+              <label className="auth-label">
+                <img src={passwordIcon} width="16" height="16" alt="" />
+                Password
+              </label>
+
+              <div className="auth-password-wrapper">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Create a strong password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+
+                <button
+                  type="button"
+                  className="auth-password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
                 >
-                  Terms
-                </span>{" "}
-                and{" "}
-                <span
-                  className="auth-link-inline"
-                  onClick={() => navigate("/privacy")}
-                  style={{ cursor: "pointer" }}
-                >
-                  Privacy
+                  <img
+                    src={showPassword ? eyeCloseIcon : eyeOpenIcon}
+                    width="20"
+                    height="20"
+                    alt=""
+                  />
+                </button>
+              </div>
+
+              {passwordLength > 0 && (
+                <div className="auth-password-strength">
+                  <div className="auth-password-strength-bar">
+                    <div className={`auth-password-strength-fill ${strength}`} />
+                  </div>
+                  <span className="auth-password-strength-text">{strength}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Terms */}
+            <div className="auth-terms">
+              <label className="auth-checkbox">
+                <input
+                  type="checkbox"
+                  checked={agreedToTerms}
+                  onChange={(e) => setAgreedToTerms(e.target.checked)}
+                />
+                <span className="auth-checkbox-label">
+                  I agree to the{" "}
+                  <span
+                    className="auth-link-inline"
+                    onClick={() => navigate("/terms")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Terms
+                  </span>{" "}
+                  and{" "}
+                  <span
+                    className="auth-link-inline"
+                    onClick={() => navigate("/privacy")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Privacy
+                  </span>
                 </span>
-              </span>
-            </label>
+              </label>
+            </div>
+
+            <Button type="submit" variant="primary" size="large">
+              Create Account
+            </Button>
+          </form>
+
+          <div className="auth-footer">
+            Already have an account?{" "}
+            <span
+              className="auth-link"
+              onClick={() => navigate("/signin")}
+              style={{ cursor: "pointer" }}
+            >
+              Sign In
+            </span>
           </div>
-
-          <Button type="submit" variant="primary" size="large">
-            Create Account
-          </Button>
-        </form>
-
-        <div className="auth-footer">
-          Already have an account?{" "}
-          <span
-            className="auth-link"
-            onClick={() => navigate("/signin")}
-            style={{ cursor: "pointer" }}
-          >
-            Sign In
-          </span>
         </div>
       </div>
     </div>
@@ -181,3 +204,4 @@ const SignUp = () => {
 };
 
 export default SignUp;
+
