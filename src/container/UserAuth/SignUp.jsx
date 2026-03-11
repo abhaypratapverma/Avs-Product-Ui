@@ -17,6 +17,12 @@ const SignUp = () => {
     name: "",
     email: "",
     password: "",
+    phone: "",
+    street: "",
+    city: "",
+    state: "",
+    country: "",
+    pincode: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -26,18 +32,42 @@ const SignUp = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
 
     if (!agreedToTerms) {
       alert("Please agree to the terms and conditions");
       return;
     }
 
-    console.log("Sign up:", formData);
+    try {
+      setLoading(true);
+      const { registerUser } = await import("../../auth/services/api");
+      
+      const addressString = `${formData.street}, ${formData.city}, ${formData.state}, ${formData.pincode}, ${formData.country}`;
+      const payload = { 
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone,
+        pincode: formData.pincode,
+        address: addressString,
+        roleName: "CLIENT" 
+      };
 
-    // Example redirect after successful signup
-    navigate("/signin");
+      await registerUser(payload);
+      // Example redirect to Verify layout after successful signup
+      navigate("/verify-user", { state: { email: formData.email } });
+    } catch (err) {
+      console.error("Sign up error:", err);
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const passwordLength = formData.password.length;
@@ -77,7 +107,10 @@ const SignUp = () => {
           </div>
 
           <form className="auth-form" onSubmit={handleSubmit}>
+            {error && <div className="auth-error" style={{ color: "red", 
+marginBottom: "1rem" }}>{error}</div>}
             
+
             {/* Name */}
             <div className="auth-field">
               <label className="auth-label">
@@ -107,6 +140,68 @@ const SignUp = () => {
                 name="email"
                 placeholder="you@example.com"
                 value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Phone */}
+            <div className="auth-field">
+              <label className="auth-label">
+                <img src={userIcon} width="16" height="16" alt="" />
+                Phone Number
+              </label>
+
+              <Input
+                type="text"
+                name="phone"
+                placeholder="1234567890"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Address */}
+            <div style={{ display: "flex", gap: "12px" }}>
+              <div className="auth-field" style={{ flex: 1 }}>
+                <label className="auth-label">
+                  <img src={userIcon} width="16" height="16" alt="" />
+                  Street
+                </label>
+                <Input type="text" name="street" placeholder="Sector 62" value={formData.street} onChange={handleChange} required />
+              </div>
+
+              <div className="auth-field" style={{ flex: 1 }}>
+                <label className="auth-label">City</label>
+                <Input type="text" name="city" placeholder="Noida" value={formData.city} onChange={handleChange} required />
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: "12px" }}>
+              <div className="auth-field" style={{ flex: 1 }}>
+                <label className="auth-label">State</label>
+                <Input type="text" name="state" placeholder="UP" value={formData.state} onChange={handleChange} required />
+              </div>
+
+              <div className="auth-field" style={{ flex: 1 }}>
+                <label className="auth-label">Country</label>
+                <Input type="text" name="country" placeholder="India" value={formData.country} onChange={handleChange} required />
+              </div>
+            </div>
+
+            {/* Pincode */}
+            <div className="auth-field">
+              <label className="auth-label">
+                <img src={userIcon} width="16" height="16" alt="" />
+                Pincode
+              </label>
+
+              <Input
+                type="text"
+                name="pincode"
+                placeholder="201301"
+                value={formData.pincode}
                 onChange={handleChange}
                 required
               />
@@ -182,8 +277,8 @@ const SignUp = () => {
               </label>
             </div>
 
-            <Button type="submit" variant="primary" size="large">
-              Create Account
+            <Button type="submit" variant="primary" size="large" disabled={loading}>
+              {loading ? "Creating Account..." : "Create Account"}
             </Button>
           </form>
 

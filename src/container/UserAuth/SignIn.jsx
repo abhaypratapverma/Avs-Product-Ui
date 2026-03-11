@@ -23,13 +23,34 @@ const SignIn = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
 
-    console.log("Sign in:", formData);
+    try {
+      setLoading(true);
+      const { loginUser } = await import("../../auth/services/api");
+      const result = await loginUser(formData);
+      
+      console.log("Sign in success:", result);
+      // Assuming result contains tokens, e.g. accessToken and refreshToken
+      if (result.data) {
+        localStorage.setItem("accessToken", result.data.accessToken);
+        localStorage.setItem("refreshToken", result.data.refreshToken);
+        localStorage.setItem("user", JSON.stringify(result.data.user || result.data));
+      }
 
-    // Example redirect after success
-    navigate("/");   // or /dashboard, /home etc
+      // Redirect after success
+      navigate("/");   
+    } catch (err) {
+      console.error("Sign in error:", err);
+      setError(err.message || "Failed to login");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,6 +85,7 @@ const SignIn = () => {
           </div>
 
           <form className="auth-form" onSubmit={handleSubmit}>
+            {error && <div className="auth-error" style={{ color: "red", marginBottom: "1rem" }}>{error}</div>}
             
             {/* Email */}
             <div className="auth-field">
@@ -129,8 +151,8 @@ const SignIn = () => {
               </span>
             </div>
 
-            <Button type="submit" variant="primary" size="large">
-              Sign In
+            <Button type="submit" variant="primary" size="large" disabled={loading}>
+              {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
 

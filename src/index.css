@@ -18,7 +18,7 @@ body,
 body {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  overflow: hidden; /* removes page scroll */
+  overflow-x: hidden; /* allows vertical scroll while removing horizontal */
   background: #ffffff;
   color: #1a1a1a;
 }
