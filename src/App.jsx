@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 
-import AuthRoutes from "./auth/routes/AuthRoutes";
+import AuthRoutes from "../src/auth/routes/authRoutes";
 import Home from "./container/pages/Home";
 
 function App() {
