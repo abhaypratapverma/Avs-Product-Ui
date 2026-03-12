@@ -1,4 +1,4 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://avs-product-auth-be-4.onrender.com";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://210.79.128.135:5000";
 
 export const registerUser = async (data) => {
   const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
