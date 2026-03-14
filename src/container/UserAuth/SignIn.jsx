@@ -62,7 +62,7 @@ const SignIn = () => {
             <div className="auth-logo-circle auth-logo-circle-1"></div>
             <div className="auth-logo-circle auth-logo-circle-2"></div>
             <div className="auth-logo-circle auth-logo-circle-3"></div>
-            <div className="auth-logo-text">AVS CUSTOMER</div>
+            <div className="auth-logo-text">AVS ABHAY</div>
           </div>
           <h1 className="auth-brand-title">Welcome Back</h1>
           <p className="auth-brand-subtitle">Sign in to access your account and continue your journey with us</p>
