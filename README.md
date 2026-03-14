@@ -66,3 +66,8 @@ src/
 │
 ├── App.jsx
 └── main.jsx
+
+
+avsplatform.store
+Domain
+Period
