@@ -71,3 +71,14 @@ src/
 avsplatform.store
 Domain
 Period
+
+
+Clone Repo
+↓
+npm install
+↓
+npm run build
+↓
+copy dist to /home/ubuntu/Avs-Product-Ui
+↓
+pm2 restart avs-client-ui
