@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   GLOBAL RESET & BASE
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #F1F5F9;
+  color: #0F172A;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   APP CONTAINER — mobile-first, centered
+   ============================================ */
+#root {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  background: #F8FAFC;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 999px;
+}
+
+/* ============================================
+   LINKS & BUTTONS RESET
+   ============================================ */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ============================================
+   HORIZONTAL SCROLL ROWS (no scrollbar visible)
+   ============================================ */
+.scroll-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scroll-row::-webkit-scrollbar {
+  display: none;
+}
+.scroll-row > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   SKELETON PULSE ANIMATION
+   ============================================ */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+/* ============================================
+   BOTTOM SHEET BACKDROP
+   ============================================ */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 40;
+  backdrop-filter: blur(2px);
+}
+
+/* ============================================
+   PAGE TRANSITION WRAPPER
+   ============================================ */
+.page-wrapper {
+  width: 100%;
+  min-height: 100%;
+}
+
+/* ============================================
+   OTP INPUT STYLES
+   ============================================ */
+.otp-input {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  border: 2px solid #E2E8F0;
+  border-radius: 12px;
+  background: #F8FAFC;
+  color: #0F172A;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.otp-input:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  background: #FFFFFF;
+}
+
+.otp-input.filled {
+  border-color: #2563EB;
+  background: #EFF6FF;
+}
+
+/* ============================================
+   BOTTOM NAV SAFE AREA
+   ============================================ */
+.bottom-nav-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ============================================
+   SWIPER / CAROUSEL DOT INDICATORS
+   ============================================ */
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #CBD5E1;
+  transition: all 0.3s ease;
+}
+.carousel-dot.active {
+  width: 20px;
+  background: #2563EB;
+}
+
+/* ============================================
+   CUSTOM CSS VARIABLES
+   ============================================ */
+:root {
+  --primary: #2563EB;
+  --secondary: #F97316;
+  --success: #16A34A;
+  --danger: #DC2626;
+  --surface: #F8FAFC;
+  --card: #FFFFFF;
+  --border: #E2E8F0;
+  --muted: #94A3B8;
+  --radius-card: 8px;
+  --radius-modal: 12px;
+  --radius-pill: 24px;
+  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
