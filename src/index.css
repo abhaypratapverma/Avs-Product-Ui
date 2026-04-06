@@ -1,41 +1,99 @@
-/* ================= GLOBAL RESET ================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-* {
+/* ═══════════════════════════════════════════════════════════
+   GLOBAL RESET & BASE
+═══════════════════════════════════════════════════════════ */
+
+*, *::before, *::after {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
 }
 
-html,
-body,
-#root {
-  height: 100%;
-  width: 100%;
-}
-
-/* ================= BASE ================= */
-
 body {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #F1F5F9;
+  color: #0F172A;
   line-height: 1.5;
-  overflow-x: hidden; /* allows vertical scroll while removing horizontal */
-  background: #ffffff;
-  color: #1a1a1a;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ================= LINKS ================= */
+/* Mobile-first: center app on desktop */
+#root {
+  display: flex;
+  justify-content: center;
+  background-color: #E2E8F0;
+}
+
+#root > * {
+  width: 100%;
+  max-width: 480px;
+  background-color: #F1F5F9;
+  min-height: 100%;
+  position: relative;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLLBAR HIDE UTILITY
+═══════════════════════════════════════════════════════════ */
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SAFE AREA (Capacitor / iOS notch support)
+═══════════════════════════════════════════════════════════ */
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SKELETON SHIMMER ANIMATION
+═══════════════════════════════════════════════════════════ */
+
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LINK RESET
+═══════════════════════════════════════════════════════════ */
 
 a {
   text-decoration: none;
-  color: #646cff;
-  font-weight: 500;
+  color: inherit;
 }
 
-a:hover {
-  color: #535bf2;
-}
-
-/* ================= BUTTON RESET ================= */
+/* ═══════════════════════════════════════════════════════════
+   BUTTON RESET
+═══════════════════════════════════════════════════════════ */
 
 button {
   font-family: inherit;
@@ -43,20 +101,33 @@ button {
   border: none;
   outline: none;
   background: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* ================= IMAGES ================= */
+/* ═══════════════════════════════════════════════════════════
+   IMAGES
+═══════════════════════════════════════════════════════════ */
 
 img {
   max-width: 100%;
   display: block;
+  object-fit: cover;
 }
 
-/* ================= DARK MODE ================= */
+/* ═══════════════════════════════════════════════════════════
+   INPUT RESET
+═══════════════════════════════════════════════════════════ */
 
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #121212;
-    color: #f5f5f5;
-  }
+input, textarea {
+  font-family: inherit;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
