@@ -1,5 +1,5 @@
 // src/components/molecules/AddressCard/AddressCard.tsx
-import { Home, Briefcase, MapPin, Check, Trash2 } from 'lucide-react';
+import { Home, Briefcase, MapPin, Check, Trash2, Edit2 } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 import type { Address } from '../../../types/api.types';
 
@@ -9,6 +9,8 @@ interface AddressCardProps {
   selected?: boolean;
   onSelect?: () => void;
   onDelete?: () => void;
+  onEdit?: () => void;
+  onSetDefault?: () => void;
 }
 
 const typeIcons = {
@@ -17,7 +19,7 @@ const typeIcons = {
   other: MapPin,
 };
 
-export function AddressCard({ address, selectable, selected, onSelect, onDelete }: AddressCardProps) {
+export function AddressCard({ address, selectable, selected, onSelect, onDelete, onEdit, onSetDefault }: AddressCardProps) {
   const Icon = typeIcons[address.type];
 
   return (
@@ -49,16 +51,35 @@ export function AddressCard({ address, selectable, selected, onSelect, onDelete 
             {address.line1}{address.line2 ? `, ${address.line2}` : ''}, {address.city}, {address.state} - {address.pincode}
           </p>
         </div>
-        <div className="flex flex-col items-end gap-2 flex-shrink-0">
-          {selected && <Check className="w-5 h-5 text-primary" />}
-          {onDelete && (
-            <button
-              onClick={(e) => { e.stopPropagation(); onDelete(); }}
-              className="text-muted hover:text-danger transition-colors"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          )}
+        <div className="flex flex-col items-end justify-between h-full flex-shrink-0">
+          {selected && <Check className="w-5 h-5 text-primary mb-2" />}
+          <div className="flex items-center gap-3 mt-auto pt-2">
+            {onSetDefault && !address.isDefault && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onSetDefault(); }}
+                className="text-muted hover:text-yellow-500 transition-colors"
+                title="Set as Default"
+              >
+                <div className="text-[10px] font-semibold uppercase tracking-wider">Set Default</div>
+              </button>
+            )}
+            {onEdit && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onEdit(); }}
+                className="text-muted hover:text-blue-500 transition-colors"
+              >
+                <Edit2 className="w-4 h-4" />
+              </button>
+            )}
+            {onDelete && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                className="text-muted hover:text-danger transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </button>
