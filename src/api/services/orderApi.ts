@@ -10,8 +10,8 @@ const USE_MOCK = CONFIG.useMock;
 
 async function get<T>(url: string) {
   try {
-    const res = await axiosInstance.get<T>(url);
-    return { data: res.data };
+    const res = await axiosInstance.get<T>(url) as unknown as T;
+    return { data: res };
   } catch (e) {
     const err = e as { message?: string };
     return { error: { message: err.message ?? 'Request failed', statusCode: 0, errors: [] } };
@@ -20,8 +20,8 @@ async function get<T>(url: string) {
 
 async function post<T>(url: string, body: unknown) {
   try {
-    const res = await axiosInstance.post<T>(url, body);
-    return { data: res.data };
+    const res = await axiosInstance.post<T>(url, body) as unknown as T;
+    return { data: res };
   } catch (e) {
     const err = e as { message?: string };
     return { error: { message: err.message ?? 'Request failed', statusCode: 0, errors: [] } };

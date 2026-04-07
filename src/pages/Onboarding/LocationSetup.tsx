@@ -8,6 +8,7 @@ import { AuthLayout } from '../../components/layouts/AuthLayout';
 import { useAppDispatch } from '../../store';
 import { setLocation } from '../../store/slices/locationSlice';
 import { ROUTES } from '../../constants/routes';
+import { useGetAddressesQuery } from '../../api/services/addressApi';
 
 export function LocationSetup() {
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ export function LocationSetup() {
   const [loading, setLoading] = useState(false);
   const [showPincode, setShowPincode] = useState(false);
   const [pincode, setPincode] = useState('');
+  
+  const { data: addresses, isLoading: isLoadingAddresses } = useGetAddressesQuery();
 
   const handleAllowLocation = () => {
     setLoading(true);
@@ -79,45 +82,81 @@ export function LocationSetup() {
         </p>
 
         <div className="flex flex-col gap-3 mt-8">
-          <Button
-            size="lg"
-            fullWidth
-            loading={loading && !showPincode}
-            onClick={handleAllowLocation}
-            leftIcon={<Target className="w-5 h-5" />}
-          >
-            Allow Location Access
-          </Button>
-
-          <button
-            onClick={() => setShowPincode(!showPincode)}
-            className="text-sm font-semibold text-primary text-center py-2"
-          >
-            Enter Pincode manually
-          </button>
-
-          {showPincode && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              className="flex gap-2"
-            >
-              <input
-                type="tel"
-                placeholder="Enter 6-digit pincode"
-                maxLength={6}
-                value={pincode}
-                onChange={(e) => setPincode(e.target.value.replace(/\D/g, ''))}
-                className="flex-1 bg-blue-50/50 border border-transparent rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-all"
-              />
+          {isLoadingAddresses ? (
+            <div className="p-4 text-center">Loading your addresses...</div>
+          ) : addresses && addresses.length > 0 ? (
+            <div className="flex flex-col gap-3">
+              <p className="text-sm font-semibold text-gray-700">Select an address to continue:</p>
+              {addresses.map(addr => (
+                <div
+                  key={addr.id}
+                  onClick={() => {
+                    dispatch(setLocation({
+                      districtCode: addr.district,
+                      districtLabel: `${addr.district}, ${addr.state}`,
+                    }));
+                    navigate(ROUTES.home);
+                  }}
+                  className="bg-white rounded-xl shadow-sm border border-border p-4 flex items-center justify-between cursor-pointer hover:border-primary transition"
+                >
+                  <div>
+                    <p className="font-semibold text-sm capitalize">{addr.type} Address {addr.isDefault && <span className="text-[10px] ml-2 bg-primary/10 text-primary px-2 py-0.5 rounded">Default</span>}</p>
+                    <p className="text-xs text-muted mt-1">{addr.line1}, {addr.city}, {addr.pincode}</p>
+                  </div>
+                  <Target className="w-5 h-5 text-gray-300" />
+                </div>
+              ))}
               <Button
-                loading={loading && showPincode}
-                onClick={handlePincodeSubmit}
-                leftIcon={<Hash className="w-4 h-4" />}
+                variant="outline"
+                onClick={() => navigate(ROUTES.addresses)}
+                className="mt-2"
               >
-                Go
+                Manage Addresses
               </Button>
-            </motion.div>
+            </div>
+          ) : (
+            <>
+              <Button
+                size="lg"
+                fullWidth
+                loading={loading && !showPincode}
+                onClick={handleAllowLocation}
+                leftIcon={<Target className="w-5 h-5" />}
+              >
+                Allow Location Access
+              </Button>
+
+              <button
+                onClick={() => setShowPincode(!showPincode)}
+                className="text-sm font-semibold text-primary text-center py-2"
+              >
+                Enter Pincode manually
+              </button>
+
+              {showPincode && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  className="flex gap-2"
+                >
+                  <input
+                    type="tel"
+                    placeholder="Enter 6-digit pincode"
+                    maxLength={6}
+                    value={pincode}
+                    onChange={(e) => setPincode(e.target.value.replace(/\D/g, ''))}
+                    className="flex-1 bg-blue-50/50 border border-transparent rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-all"
+                  />
+                  <Button
+                    loading={loading && showPincode}
+                    onClick={handlePincodeSubmit}
+                    leftIcon={<Hash className="w-4 h-4" />}
+                  >
+                    Go
+                  </Button>
+                </motion.div>
+              )}
+            </>
           )}
         </div>
 

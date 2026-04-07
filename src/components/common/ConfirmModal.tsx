@@ -35,10 +35,10 @@ export function ConfirmModal({
             onClick={onCancel}
           />
           <motion.div
-            className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white rounded-t-[20px] z-50 p-6 shadow-2xl"
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
+            className="fixed bottom-0 left-1/2 w-full max-w-[430px] bg-white rounded-t-[20px] z-50 p-6 shadow-2xl"
+            initial={{ x: '-50%', y: '100%' }}
+            animate={{ x: '-50%', y: 0 }}
+            exit={{ x: '-50%', y: '100%' }}
             transition={{ type: 'spring', damping: 26, stiffness: 300 }}
           >
             <div className="flex justify-center mb-4">

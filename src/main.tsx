@@ -17,7 +17,13 @@ if (!container) throw new Error('Root element not found');
 createRoot(container).render(
   <StrictMode>
     <Provider store={store}>
-      <BrowserRouter basename="/client">
+      <BrowserRouter 
+        basename="/client"
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <AppRouter />
         <Toaster
           position="top-center"

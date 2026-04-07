@@ -3,6 +3,7 @@
 export const ROUTES = {
   locationSetup:     '/location-setup',
   login:             '/login',
+  register:          '/register',
   profileSetup:      '/profile-setup',
   home:              '/',
   explore:           '/explore',

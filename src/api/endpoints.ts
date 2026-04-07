@@ -2,11 +2,12 @@
 
 export const ENDPOINTS = {
   auth: {
-    sendOtp:    '/auth/send-otp',
-    verifyOtp:  '/auth/verify-otp',
-    refresh:    '/auth/refresh',
+    register:   '/auth/register',
+    verifyUser: '/auth/verify_user',
+    login:      '/auth/login',
+    refresh:    '/auth/refresh-token',
     logout:     '/auth/logout',
-    me:         '/auth/me',
+    me:         '/auth/me', // We can keep or update this later
   },
   home: {
     banners:    '/home/banners',
@@ -32,11 +33,11 @@ export const ENDPOINTS = {
     detail:     (id: number) => `/orders/${id}`,
   },
   address: {
-    list:       '/addresses',
-    create:     '/addresses',
-    update:     (id: number) => `/addresses/${id}`,
-    delete:     (id: number) => `/addresses/${id}`,
-    setDefault: (id: number) => `/addresses/${id}/default`,
-    getDefault: '/addresses/default',
+    list:       '/customer/user/addresses',
+    create:     '/customer/user/addresses/add',
+    update:     '/customer/user/addresses/update',
+    delete:     '/customer/user/addresses/delete',
+    setDefault: '/customer/user/addresses/default',
+    getDefault: '/customer/user/addresses/default', // Adjust if you have a distinct get route
   },
 } as const;

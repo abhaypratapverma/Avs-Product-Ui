@@ -5,6 +5,7 @@ import type { User } from '../../types/user.types';
 export interface AuthState {
   user: User | null;
   accessToken: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
   isGuest: boolean;
 }
@@ -12,6 +13,7 @@ export interface AuthState {
 const initialState: AuthState = {
   user: null,
   accessToken: localStorage.getItem('accessToken'),
+  refreshToken: localStorage.getItem('refreshToken'),
   isAuthenticated: false,
   isGuest: false,
 };
@@ -20,9 +22,13 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAuth(state, action: PayloadAction<{ user: User; accessToken: string }>) {
+    setAuth(state, action: PayloadAction<{ user: User; accessToken: string; refreshToken?: string }>) {
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
+      if (action.payload.refreshToken) {
+        state.refreshToken = action.payload.refreshToken;
+        localStorage.setItem('refreshToken', action.payload.refreshToken);
+      }
       state.isAuthenticated = true;
       state.isGuest = false;
       localStorage.setItem('accessToken', action.payload.accessToken);
@@ -30,9 +36,11 @@ const authSlice = createSlice({
     clearAuth(state) {
       state.user = null;
       state.accessToken = null;
+      state.refreshToken = null;
       state.isAuthenticated = false;
       state.isGuest = false;
       localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     },
     setGuest(state) {
       state.isGuest = true;

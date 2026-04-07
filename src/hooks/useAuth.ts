@@ -4,7 +4,7 @@ import { clearAuth, setGuest } from '../store/slices/authSlice';
 
 export function useAuth() {
   const dispatch = useAppDispatch();
-  const { user, accessToken, isAuthenticated, isGuest } = useAppSelector((s) => s.auth);
+  const { user, accessToken, refreshToken, isAuthenticated, isGuest } = useAppSelector((s) => s.auth);
 
   const logout = () => {
     dispatch(clearAuth());
@@ -14,5 +14,5 @@ export function useAuth() {
     dispatch(setGuest());
   };
 
-  return { user, accessToken, isAuthenticated, isGuest, logout, continueAsGuest };
+  return { user, accessToken, refreshToken, isAuthenticated, isGuest, logout, continueAsGuest };
 }

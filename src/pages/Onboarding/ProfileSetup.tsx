@@ -70,7 +70,7 @@ export function ProfileSetup() {
           <p className="text-primary text-sm font-semibold mt-3">Upload Photo</p>
         </motion.div>
 
-        <form onSubmit={void handleSubmit(onSubmit)} className="flex flex-col gap-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
           <Input
             {...register('name')}
             id="name"

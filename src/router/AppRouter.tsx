@@ -10,6 +10,7 @@ import { withGuestAccess } from '../hoc/withGuestAccess';
 // Onboarding
 import { LocationSetup }     from '../pages/Onboarding/LocationSetup';
 import { Login }             from '../pages/Onboarding/Login';
+import { Register }          from '../pages/Onboarding/Register';
 import { ProfileSetup }      from '../pages/Onboarding/ProfileSetup';
 
 // Main pages
@@ -46,6 +47,7 @@ export function AppRouter() {
         {/* ── ONBOARDING (no layout) ── */}
         <Route path={ROUTES.locationSetup} element={<LocationSetup />} />
         <Route path={ROUTES.login}         element={<Login />} />
+        <Route path={ROUTES.register}      element={<Register />} />
         <Route path={ROUTES.profileSetup}  element={<ProfileSetup />} />
 
         {/* ── MAIN APP (with layout) ── */}

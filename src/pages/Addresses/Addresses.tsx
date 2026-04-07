@@ -98,7 +98,7 @@ export function Addresses() {
 
       {/* Add Address Bottom Sheet */}
       <BottomSheet isOpen={showForm} onClose={() => { setShowForm(false); reset(); }} title="Add New Address">
-        <form onSubmit={void handleSubmit(onSubmit)} className="p-4 flex flex-col gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-4 flex flex-col gap-4">
           {/* Address Type */}
           <div>
             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-2">Type</label>

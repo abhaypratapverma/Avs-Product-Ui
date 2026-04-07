@@ -10,8 +10,8 @@ const USE_MOCK = CONFIG.useMock;
 
 async function axiosFetch<T>(url: string, params?: Record<string, unknown>): Promise<{ data: T } | { error: { message: string; statusCode: number; errors: string[] } }> {
   try {
-    const res = await axiosInstance.get<T>(url, { params });
-    return { data: res.data };
+    const res = await axiosInstance.get<T>(url, { params }) as unknown as T;
+    return { data: res };
   } catch (e) {
     const err = e as { message?: string };
     return { error: { message: err.message ?? 'Request failed', statusCode: 0, errors: [] } };

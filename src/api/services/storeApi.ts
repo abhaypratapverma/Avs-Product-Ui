@@ -12,8 +12,8 @@ const USE_MOCK = CONFIG.useMock;
 
 async function get<T>(url: string, params?: Record<string, unknown>) {
   try {
-    const res = await axiosInstance.get<T>(url, { params });
-    return { data: res.data };
+    const res = await axiosInstance.get<T>(url, { params }) as unknown as T;
+    return { data: res };
   } catch (e) {
     const err = e as { message?: string };
     return { error: { message: err.message ?? 'Request failed', statusCode: 0, errors: [] } };

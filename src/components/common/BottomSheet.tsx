@@ -49,13 +49,13 @@ export function BottomSheet({ isOpen, onClose, title, children, className }: Bot
           <motion.div
             key="sheet"
             className={cn(
-              'fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white z-50',
+              'fixed bottom-0 left-1/2 w-full max-w-[430px] bg-white z-50',
               'rounded-t-[20px] shadow-2xl overflow-hidden',
               className,
             )}
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
+            initial={{ x: '-50%', y: '100%' }}
+            animate={{ x: '-50%', y: 0 }}
+            exit={{ x: '-50%', y: '100%' }}
             transition={{ type: 'spring', damping: 26, stiffness: 300 }}
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}

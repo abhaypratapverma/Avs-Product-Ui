@@ -4,6 +4,7 @@ import { ChevronRight, MapPin, Package, User, LogOut, HelpCircle, Bell, Shield }
 import { PageWrapper } from '../../components/layouts/PageWrapper';
 import { Avatar } from '../../components/atoms/Avatar';
 import { useAuth } from '../../hooks/useAuth';
+import { useLogoutMutation } from '../../api/services/authApi';
 import { ROUTES } from '../../constants/routes';
 import toast from 'react-hot-toast';
 
@@ -16,9 +17,17 @@ interface MenuItem {
 
 export function Profile() {
   const navigate = useNavigate();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, refreshToken, logout } = useAuth();
+  const [logoutApi] = useLogoutMutation();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      if (refreshToken) {
+        await logoutApi({ refreshToken }).unwrap();
+      }
+    } catch {
+      // ignore API failure and proceed to logout locally
+    }
     logout();
     toast.success('Logged out successfully');
     navigate(ROUTES.login);

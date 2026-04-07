@@ -24,8 +24,8 @@ const MOCK_ADDRESSES: Address[] = [
 
 async function get<T>(url: string) {
   try {
-    const res = await axiosInstance.get<T>(url);
-    return { data: res.data };
+    const res = await axiosInstance.get<T>(url) as unknown as T;
+    return { data: res };
   } catch (e) {
     const err = e as { message?: string };
     return { error: { message: err.message ?? 'Request failed', statusCode: 0, errors: [] } };
@@ -34,28 +34,28 @@ async function get<T>(url: string) {
 
 async function post<T>(url: string, body: unknown) {
   try {
-    const res = await axiosInstance.post<T>(url, body);
-    return { data: res.data };
+    const res = await axiosInstance.post<T>(url, body) as unknown as T;
+    return { data: res };
   } catch (e) {
     const err = e as { message?: string };
     return { error: { message: err.message ?? 'Request failed', statusCode: 0, errors: [] } };
   }
 }
 
-async function del<T>(url: string) {
+async function put<T>(url: string, body: unknown) {
   try {
-    const res = await axiosInstance.delete<T>(url);
-    return { data: res.data };
+    const res = await axiosInstance.put<T>(url, body) as unknown as T;
+    return { data: res };
   } catch (e) {
     const err = e as { message?: string };
     return { error: { message: err.message ?? 'Request failed', statusCode: 0, errors: [] } };
   }
 }
 
-async function patch<T>(url: string) {
+async function delBody<T>(url: string, body: unknown) {
   try {
-    const res = await axiosInstance.patch<T>(url);
-    return { data: res.data };
+    const res = await axiosInstance.delete<T>(url, { data: body }) as unknown as T;
+    return { data: res };
   } catch (e) {
     const err = e as { message?: string };
     return { error: { message: err.message ?? 'Request failed', statusCode: 0, errors: [] } };
@@ -70,28 +70,63 @@ export const addressApi = createApi({
     getAddresses: builder.query<Address[], void>({
       queryFn: async () => {
         if (USE_MOCK) return { data: MOCK_ADDRESSES };
-        return get<Address[]>(ENDPOINTS.address.list);
+        const response = await get<any[]>(ENDPOINTS.address.list);
+        if ('error' in response) return response;
+        const mapped = response.data.map((item: any) => ({
+          id: item.id,
+          userId: 1, // Phase 1 mock
+          type: item.isDefault ? 'home' : 'other', // Try to derive type
+          line1: item.street,
+          city: item.city,
+          district: item.districtCode || item.city,
+          state: item.state,
+          pincode: item.zipCode,
+          isDefault: item.isDefault,
+        }));
+        return { data: mapped as Address[] };
       },
       providesTags: ['Address'],
     }),
     createAddress: builder.mutation<Address, Omit<Address, 'id' | 'userId'>>({
       queryFn: async (body) => {
         if (USE_MOCK) return { data: { ...body, id: Date.now(), userId: 1 } };
-        return post<Address>(ENDPOINTS.address.create, body);
+        const payload = {
+          street: `${body.line1} ${body.line2 ?? ''}`.trim(),
+          city: body.city,
+          state: body.state,
+          zipCode: body.pincode,
+          country: 'IN', // Defaulting as per curl example
+        };
+        return post<Address>(ENDPOINTS.address.create, payload);
+      },
+      invalidatesTags: ['Address'],
+    }),
+    updateAddress: builder.mutation<Address, Address>({
+      queryFn: async (body) => {
+        if (USE_MOCK) return { data: body };
+        const payload = {
+          addressId: body.id,
+          street: `${body.line1} ${body.line2 ?? ''}`.trim(),
+          city: body.city,
+          state: body.state,
+          zipCode: body.pincode,
+          country: 'IN',
+        };
+        return put<Address>(ENDPOINTS.address.update, payload);
       },
       invalidatesTags: ['Address'],
     }),
     deleteAddress: builder.mutation<void, number>({
       queryFn: async (id) => {
         if (USE_MOCK) return { data: undefined };
-        return del<void>(ENDPOINTS.address.delete(id));
+        return delBody<void>(ENDPOINTS.address.delete, { id });
       },
       invalidatesTags: ['Address'],
     }),
     setDefaultAddress: builder.mutation<void, number>({
       queryFn: async (id) => {
         if (USE_MOCK) return { data: undefined };
-        return patch<void>(ENDPOINTS.address.setDefault(id));
+        return put<void>(ENDPOINTS.address.setDefault, { id });
       },
       invalidatesTags: ['Address'],
     }),
@@ -101,6 +136,7 @@ export const addressApi = createApi({
 export const {
   useGetAddressesQuery,
   useCreateAddressMutation,
+  useUpdateAddressMutation,
   useDeleteAddressMutation,
   useSetDefaultAddressMutation,
 } = addressApi;
