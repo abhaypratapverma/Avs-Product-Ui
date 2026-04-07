@@ -6,6 +6,7 @@ import { AppLayout }      from '../components/layouts/AppLayout';
 import { withLocation }   from '../hoc/withLocation';
 import { withAuth }       from '../hoc/withAuth';
 import { withGuestAccess } from '../hoc/withGuestAccess';
+import { useAuth }        from '../hooks/useAuth';
 
 // Onboarding
 import { LocationSetup }     from '../pages/Onboarding/LocationSetup';
@@ -66,8 +67,13 @@ export function AppRouter() {
         </Route>
 
         {/* ── FALLBACK ── */}
-        <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
+        <Route path="*" element={<FallbackRoute />} />
       </Routes>
     </AnimatePresence>
   );
+}
+
+function FallbackRoute() {
+  const { isAuthenticated } = useAuth();
+  return <Navigate to={isAuthenticated ? ROUTES.home : ROUTES.login} replace />;
 }
