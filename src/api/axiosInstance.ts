@@ -1,6 +1,7 @@
 // src/api/axiosInstance.ts
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { CONFIG } from '../constants/config';
+import { resolveAppPath } from '../constants/appBase';
 import type { ApiError } from '../types/api.types';
 import { ENDPOINTS } from './endpoints';
 
@@ -76,7 +77,7 @@ axiosInstance.interceptors.response.use(
           const { clearAuth } = await import('../store/slices/authSlice');
           storeRef.dispatch(clearAuth());
         }
-        window.location.href = '/login';
+        window.location.assign(resolveAppPath('/login'));
         return Promise.reject(normalizeError(error));
       }
     }

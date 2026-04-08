@@ -20,11 +20,22 @@ export function Explore() {
   const debouncedQuery = useDebounce(query);
 
   const { data: categories } = useGetCategoriesQuery();
-  const { data: stores, isLoading } = useGetStoresQuery({ districtCode, category: selectedCategory === 'all' ? undefined : selectedCategory });
+  const skip = !districtCode;
+  const { data: stores, isLoading } = useGetStoresQuery(districtCode, { skip });
 
-  const filtered = (stores ?? []).filter(s =>
-    !debouncedQuery || s.name.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
-    s.category.toLowerCase().includes(debouncedQuery.toLowerCase())
+  const selectedCat = categories?.find((c) => c.slug === selectedCategory);
+  const byCategory =
+    selectedCategory === 'all'
+      ? (stores ?? [])
+      : (stores ?? []).filter((s) =>
+          selectedCat ? s.category.toLowerCase() === selectedCat.name.toLowerCase() : true,
+        );
+
+  const filtered = byCategory.filter(
+    (s) =>
+      !debouncedQuery ||
+      s.name.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
+      s.category.toLowerCase().includes(debouncedQuery.toLowerCase()),
   );
 
   return (

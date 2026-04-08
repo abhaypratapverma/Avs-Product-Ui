@@ -5,12 +5,18 @@ import { axiosInstance } from '../axiosInstance';
 import type { Banner, Category, Merchant, Store } from '../../types/store.types';
 import { MOCK_BANNERS, MOCK_CATEGORIES, MOCK_MERCHANTS, MOCK_STORES } from '../../mock';
 import { CONFIG } from '../../constants/config';
+import {
+  mapApiBanner,
+  mapApiCategory,
+  mapApiMerchant,
+  mapApiShopToStore,
+} from '../mappers/customerPublic';
 
 const USE_MOCK = CONFIG.useMock;
 
-async function axiosFetch<T>(url: string, params?: Record<string, unknown>): Promise<{ data: T } | { error: { message: string; statusCode: number; errors: string[] } }> {
+async function axiosFetch<T>(url: string): Promise<{ data: T } | { error: { message: string; statusCode: number; errors: string[] } }> {
   try {
-    const res = await axiosInstance.get<T>(url, { params }) as unknown as T;
+    const res = (await axiosInstance.get<T>(url)) as unknown as T;
     return { data: res };
   } catch (e) {
     const err = e as { message?: string };
@@ -28,7 +34,12 @@ export const homeApi = createApi({
         if (USE_MOCK) {
           return { data: MOCK_BANNERS.filter((b) => b.districtCode === districtCode || districtCode === '') };
         }
-        return axiosFetch<Banner[]>(ENDPOINTS.home.banners, { districtCode });
+        const result = await axiosFetch<unknown[]>(ENDPOINTS.home.banner(districtCode));
+        if ('error' in result) return result;
+        const rows = Array.isArray(result.data) ? result.data : [];
+        return {
+          data: rows.map((row) => mapApiBanner(row as Record<string, unknown>, districtCode)),
+        };
       },
     }),
     getShops: builder.query<Store[], string>({
@@ -36,19 +47,31 @@ export const homeApi = createApi({
         if (USE_MOCK) {
           return { data: MOCK_STORES.filter((s) => s.districtCode === districtCode || districtCode === '') };
         }
-        return axiosFetch<Store[]>(ENDPOINTS.home.shops, { districtCode });
+        const result = await axiosFetch<unknown[]>(ENDPOINTS.home.shops(districtCode));
+        if ('error' in result) return result;
+        const rows = Array.isArray(result.data) ? result.data : [];
+        return { data: rows.map((row) => mapApiShopToStore(row as Record<string, unknown>)) };
       },
     }),
     getCategories: builder.query<Category[], void>({
       queryFn: async () => {
         if (USE_MOCK) return { data: MOCK_CATEGORIES };
-        return axiosFetch<Category[]>(ENDPOINTS.home.categories);
+        const result = await axiosFetch<unknown[]>(ENDPOINTS.home.categoriesShops);
+        if ('error' in result) return result;
+        const rows = Array.isArray(result.data) ? result.data : [];
+        const mapped = rows.map((r) => mapApiCategory(r as Record<string, unknown>));
+        const roots = mapped.filter((c) => c.parentId == null);
+        const allChip: Category = { id: -1, name: 'All', icon: '🏪', slug: 'all', parentId: null };
+        return { data: [allChip, ...roots] };
       },
     }),
     getMerchants: builder.query<Merchant[], string>({
       queryFn: async (districtCode) => {
         if (USE_MOCK) return { data: MOCK_MERCHANTS };
-        return axiosFetch<Merchant[]>(ENDPOINTS.home.merchants, { districtCode });
+        const result = await axiosFetch<unknown[]>(ENDPOINTS.home.topMerchants(districtCode));
+        if ('error' in result) return result;
+        const rows = Array.isArray(result.data) ? result.data : [];
+        return { data: rows.map((row) => mapApiMerchant(row as Record<string, unknown>)) };
       },
     }),
   }),

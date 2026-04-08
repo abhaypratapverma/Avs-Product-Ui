@@ -2,6 +2,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 export interface LocationState {
+  /** 6-digit pincode for APIs (path + X-District-Code), not city/district name */
   districtCode: string | null;
   districtLabel: string | null;
   coords: { lat: number; lng: number } | null;

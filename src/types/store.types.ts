@@ -41,6 +41,8 @@ export interface Category {
   name: string;
   icon: string;
   slug: string;
+  /** Present when loaded from API category tree; omitted in legacy mocks. */
+  parentId?: number | null;
 }
 
 export interface Merchant {

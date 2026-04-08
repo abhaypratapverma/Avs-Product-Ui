@@ -10,7 +10,7 @@ export const MOCK_BANNERS: Banner[] = [
     tagLine: 'Up to 40% OFF on Fresh Greens',
     ctaText: 'Shop Now',
     isSponsored: false,
-    districtCode: 'Lucknow',
+    districtCode: '226001',
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ export const MOCK_BANNERS: Banner[] = [
     tagLine: 'New Arrivals — Gadgets & Accessories',
     ctaText: 'Explore',
     isSponsored: true,
-    districtCode: 'Lucknow',
+    districtCode: '226001',
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ export const MOCK_BANNERS: Banner[] = [
     tagLine: 'Free Delivery on all Medicines',
     ctaText: 'Order Now',
     isSponsored: false,
-    districtCode: 'Lucknow',
+    districtCode: '226001',
   },
   {
     id: 4,
@@ -40,6 +40,6 @@ export const MOCK_BANNERS: Banner[] = [
     tagLine: 'Farm-fresh produce every morning',
     ctaText: 'Shop Fresh',
     isSponsored: false,
-    districtCode: 'Lucknow',
+    districtCode: '226001',
   },
 ];

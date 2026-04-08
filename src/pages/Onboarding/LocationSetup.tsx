@@ -9,6 +9,7 @@ import { useAppDispatch } from '../../store';
 import { setLocation } from '../../store/slices/locationSlice';
 import { ROUTES } from '../../constants/routes';
 import { useGetAddressesQuery } from '../../api/services/addressApi';
+import { reverseGeocode, pincodeToDistrict } from '../../utils/geocode';
 
 export function LocationSetup() {
   const navigate = useNavigate();
@@ -21,27 +22,36 @@ export function LocationSetup() {
 
   const handleAllowLocation = () => {
     setLoading(true);
-    // Phase 1: always resolve to Lucknow
-    setTimeout(() => {
-      dispatch(setLocation({
-        districtCode: 'Lucknow',
-        districtLabel: 'Lucknow, UP',
-        coords: { lat: 26.8467, lng: 80.9462 },
-      }));
-      navigate(ROUTES.home);
-    }, 1200);
+    void (async () => {
+      try {
+        const geo = await reverseGeocode(26.8467, 80.9462);
+        dispatch(setLocation(geo));
+        navigate(ROUTES.home);
+      } finally {
+        setLoading(false);
+      }
+    })();
   };
 
   const handlePincodeSubmit = () => {
-    if (pincode.length < 6) return;
+    const clean = pincode.replace(/\D/g, '');
+    if (clean.length !== 6) return;
     setLoading(true);
-    setTimeout(() => {
-      dispatch(setLocation({
-        districtCode: 'Lucknow',
-        districtLabel: 'Lucknow, UP',
-      }));
-      navigate(ROUTES.home);
-    }, 800);
+    void (async () => {
+      try {
+        const geo = await pincodeToDistrict(clean);
+        dispatch(
+          setLocation({
+            districtCode: geo.districtCode,
+            districtLabel: geo.districtLabel,
+            coords: geo.coords,
+          }),
+        );
+        navigate(ROUTES.home);
+      } finally {
+        setLoading(false);
+      }
+    })();
   };
 
   return (
@@ -91,10 +101,14 @@ export function LocationSetup() {
                 <div
                   key={addr.id}
                   onClick={() => {
-                    dispatch(setLocation({
-                      districtCode: addr.district,
-                      districtLabel: `${addr.district}, ${addr.state}`,
-                    }));
+                    const pin = (addr.pincode ?? '').replace(/\D/g, '').slice(0, 6);
+                    dispatch(
+                      setLocation({
+                        districtCode: pin || addr.district,
+                        districtLabel: `${addr.city}, ${addr.state}`,
+                        coords: undefined,
+                      }),
+                    );
                     navigate(ROUTES.home);
                   }}
                   className="bg-white rounded-xl shadow-sm border border-border p-4 flex items-center justify-between cursor-pointer hover:border-primary transition"

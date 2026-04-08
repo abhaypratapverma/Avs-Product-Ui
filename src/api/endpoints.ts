@@ -10,15 +10,17 @@ export const ENDPOINTS = {
     me:         '/auth/me', // We can keep or update this later
   },
   home: {
-    banners:    '/home/banners',
-    shops:      '/home/shops',
-    categories: '/home/categories',
-    merchants:  '/home/top-merchants',
+    banner: (districtCode: string) =>
+      `/customer/public/home/banner/${encodeURIComponent(districtCode)}`,
+    categoriesShops: '/customer/public/home/categories-shops',
+    shops: (districtCode: string) =>
+      `/customer/public/home/shops/${encodeURIComponent(districtCode)}`,
+    topMerchants: (districtCode: string) =>
+      `/customer/public/home/top-merchants/${encodeURIComponent(districtCode)}`,
   },
-  stores: {
-    list:       '/stores',
-    detail:     (id: number) => `/stores/${id}`,
-    products:   (id: number) => `/stores/${id}/products`,
+  customer: {
+    storeById: (storeId: number) => `/customer/${storeId}/stores`,
+    productsByStoreId: (storeId: number) => `/customer/${storeId}/products`,
   },
   cart: {
     get:        '/cart',

@@ -7,17 +7,13 @@ import type { Product } from '../../types/product.types';
 import { MOCK_STORES } from '../../mock/stores.mock';
 import { MOCK_PRODUCTS } from '../../mock/products.mock';
 import { CONFIG } from '../../constants/config';
+import { mapApiProduct, mapApiShopToStore } from '../mappers/customerPublic';
 
 const USE_MOCK = CONFIG.useMock;
 
-async function get<T>(url: string, params?: Record<string, unknown>) {
-  try {
-    const res = await axiosInstance.get<T>(url, { params }) as unknown as T;
-    return { data: res };
-  } catch (e) {
-    const err = e as { message?: string };
-    return { error: { message: err.message ?? 'Request failed', statusCode: 0, errors: [] } };
-  }
+function requestError(e: unknown): { message: string; statusCode: number; errors: string[] } {
+  const err = e as { message?: string };
+  return { message: err.message ?? 'Request failed', statusCode: 0, errors: [] };
 }
 
 export const storeApi = createApi({
@@ -25,16 +21,19 @@ export const storeApi = createApi({
   baseQuery: fakeBaseQuery(),
   tagTypes: ['Store'],
   endpoints: (builder) => ({
-    getStores: builder.query<Store[], { districtCode: string; category?: string }>({
-      queryFn: async ({ districtCode, category }) => {
+    getStores: builder.query<Store[], string>({
+      queryFn: async (districtCode) => {
         if (USE_MOCK) {
-          let stores = MOCK_STORES.filter((s) => s.districtCode === districtCode || districtCode === '');
-          if (category && category !== 'all') {
-            stores = stores.filter((s) => s.category.toLowerCase() === category.toLowerCase());
-          }
-          return { data: stores };
+          return { data: MOCK_STORES.filter((s) => s.districtCode === districtCode || districtCode === '') };
         }
-        return get<Store[]>(ENDPOINTS.stores.list, { districtCode, category });
+        try {
+          const res = (await axiosInstance.get(ENDPOINTS.home.shops(districtCode))) as unknown;
+          const rows = Array.isArray(res) ? res : [];
+          const data: Store[] = rows.map((row) => mapApiShopToStore(row as Record<string, unknown>));
+          return { data };
+        } catch (e) {
+          return { error: requestError(e) };
+        }
       },
     }),
     getStoreDetail: builder.query<Store, number>({
@@ -44,7 +43,13 @@ export const storeApi = createApi({
           if (!store) return { error: { message: 'Store not found', statusCode: 404, errors: [] } };
           return { data: store };
         }
-        return get<Store>(ENDPOINTS.stores.detail(id));
+        try {
+          const res = (await axiosInstance.get(ENDPOINTS.customer.storeById(id))) as unknown;
+          const data: Store = mapApiShopToStore(res as Record<string, unknown>);
+          return { data };
+        } catch (e) {
+          return { error: requestError(e) };
+        }
       },
     }),
     getStoreProducts: builder.query<Product[], { storeId: number; category?: string }>({
@@ -54,7 +59,15 @@ export const storeApi = createApi({
           if (category) products = products.filter((p) => p.category === category);
           return { data: products };
         }
-        return get<Product[]>(ENDPOINTS.stores.products(storeId), { category });
+        try {
+          const res = (await axiosInstance.get(ENDPOINTS.customer.productsByStoreId(storeId))) as unknown;
+          const rows = Array.isArray(res) ? res : [];
+          let data: Product[] = rows.map((row) => mapApiProduct(row as Record<string, unknown>, storeId));
+          if (category) data = data.filter((p) => p.category === category);
+          return { data };
+        } catch (e) {
+          return { error: requestError(e) };
+        }
       },
     }),
   }),

@@ -19,14 +19,19 @@ export function Home() {
   const districtCode = useAppSelector((s) => s.location.districtCode ?? '');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const { data: banners, isLoading: bannersLoading } = useGetBannersQuery(districtCode);
+  const skip = !districtCode;
+  const { data: banners, isLoading: bannersLoading } = useGetBannersQuery(districtCode, { skip });
   const { data: categories, isLoading: catsLoading } = useGetCategoriesQuery();
-  const { data: merchants, isLoading: merchantsLoading } = useGetMerchantsQuery(districtCode);
-  const { data: shops, isLoading: shopsLoading } = useGetShopsQuery(districtCode);
+  const { data: merchants, isLoading: merchantsLoading } = useGetMerchantsQuery(districtCode, { skip });
+  const { data: shops, isLoading: shopsLoading } = useGetShopsQuery(districtCode, { skip });
 
-  const filteredShops = selectedCategory === 'all'
-    ? shops ?? []
-    : (shops ?? []).filter(s => s.category.toLowerCase() === selectedCategory);
+  const selectedCat = categories?.find((c) => c.slug === selectedCategory);
+  const filteredShops =
+    selectedCategory === 'all'
+      ? (shops ?? [])
+      : (shops ?? []).filter((s) =>
+          selectedCat ? s.category.toLowerCase() === selectedCat.name.toLowerCase() : true,
+        );
 
   return (
     <PageWrapper>

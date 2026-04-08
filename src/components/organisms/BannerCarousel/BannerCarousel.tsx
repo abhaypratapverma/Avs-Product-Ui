@@ -71,8 +71,12 @@ export function BannerCarousel({ banners, isLoading = false }: BannerCarouselPro
             {banner.isSponsored && (
               <span className="text-[9px] font-semibold text-white/70 bg-black/30 px-2 py-0.5 rounded mb-1 inline-block">SPONSORED</span>
             )}
-            <p className="text-white font-bold text-sm leading-tight drop-shadow">{banner.tagLine}</p>
-            <p className="text-white/80 text-xs mt-0.5">{banner.storeName}</p>
+            {banner.tagLine ? (
+              <p className="text-white font-bold text-sm leading-tight drop-shadow">{banner.tagLine}</p>
+            ) : null}
+            {banner.storeName ? (
+              <p className="text-white/80 text-xs mt-0.5">{banner.storeName}</p>
+            ) : null}
           </div>
           {/* Featured Store badge */}
           <div className="absolute top-2 left-2">

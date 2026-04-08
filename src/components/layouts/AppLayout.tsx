@@ -15,7 +15,7 @@ export function AppLayout() {
   const { districtLabel, changeLocation } = useAppLocation();
 
   const handleSetLucknow = () => {
-    changeLocation('Lucknow', 'Lucknow, UP', { lat: 26.8467, lng: 80.9462 });
+    changeLocation('226001', 'Lucknow, UP', { lat: 26.8467, lng: 80.9462 });
     locationSheet.close();
   };
 

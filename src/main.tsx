@@ -7,6 +7,7 @@ import './styles/globals.css';
 import store from './store';
 import { injectStore } from './api/axiosInstance';
 import { AppRouter } from './router/AppRouter';
+import { getRouterBasename } from './constants/appBase';
 
 // Inject store into axios instance for token/district headers
 injectStore(store);
@@ -17,8 +18,8 @@ if (!container) throw new Error('Root element not found');
 createRoot(container).render(
   <StrictMode>
     <Provider store={store}>
-      <BrowserRouter 
-        basename="/client"
+      <BrowserRouter
+        basename={getRouterBasename()}
         future={{
           v7_startTransition: true,
           v7_relativeSplatPath: true,
