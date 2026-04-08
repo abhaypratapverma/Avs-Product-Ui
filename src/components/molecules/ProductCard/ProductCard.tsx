@@ -38,7 +38,11 @@ export function ProductCard({ product, variant = 'grid', storeName, className }:
         </div>
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-gray-900 text-sm truncate">{product.name}</p>
-          <p className="text-xs text-muted">{product.unit}</p>
+          <div className="text-xs text-muted flex items-center gap-1 mt-0.5">
+            {product.brand && <span className="font-medium text-primary">{product.brand}</span>}
+            {product.brand && <span>&bull;</span>}
+            <span>{product.unit}</span>
+          </div>
           <div className="flex items-center gap-2 mt-1">
             <span className="font-bold text-gray-900 text-sm">{formatCurrency(product.price)}</span>
             {discountPct > 0 && (
@@ -93,7 +97,11 @@ export function ProductCard({ product, variant = 'grid', storeName, className }:
       </div>
       <div className="p-2.5 flex flex-col flex-1">
         <p className="font-semibold text-gray-900 text-[13px] leading-tight line-clamp-2">{product.name}</p>
-        <p className="text-[11px] text-muted mt-0.5">{product.unit}</p>
+        <div className="text-[11px] text-muted mt-1 flex flex-wrap items-center gap-x-1">
+          {product.brand && <span className="font-medium text-primary truncate max-w-full">{product.brand}</span>}
+          {product.brand && <span>&bull;</span>}
+          <span className="whitespace-nowrap">{product.unit}</span>
+        </div>
         <div className="flex items-center justify-between mt-auto pt-2">
           <div>
             <span className="font-bold text-gray-900 text-sm">{formatCurrency(product.price)}</span>

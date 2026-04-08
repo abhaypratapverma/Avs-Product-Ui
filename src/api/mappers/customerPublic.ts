@@ -151,6 +151,7 @@ export function mapApiProduct(raw: Record<string, unknown>, storeId: number): Pr
     }
   }
   const desc = raw['description'];
+  const brandObj = raw['brand'] as Record<string, unknown> | undefined;
   return {
     id: num(raw['id']),
     storeId,
@@ -164,5 +165,6 @@ export function mapApiProduct(raw: Record<string, unknown>, storeId: number): Pr
     inStock,
     isDeal: mrp > price,
     discountPercent: mrp > price ? Math.round(((mrp - price) / mrp) * 100) : undefined,
+    brand: str(brandObj?.['name']) || undefined,
   };
 }

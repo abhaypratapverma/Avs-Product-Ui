@@ -13,4 +13,5 @@ export interface Product {
   inStock: boolean;
   isDeal: boolean;
   discountPercent?: number;
+  brand?: string;
 }
