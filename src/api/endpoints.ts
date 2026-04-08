@@ -13,8 +13,7 @@ export const ENDPOINTS = {
     banner: (districtCode: string) =>
       `/customer/public/home/banner/${encodeURIComponent(districtCode)}`,
     categoriesShops: '/customer/public/home/categories-shops',
-    shops: (districtCode: string) =>
-      `/customer/public/home/shops/${encodeURIComponent(districtCode)}`,
+    shops: '/customer/public/home/shops/district-shops',
     topMerchants: (districtCode: string) =>
       `/customer/public/home/top-merchants/${encodeURIComponent(districtCode)}`,
   },

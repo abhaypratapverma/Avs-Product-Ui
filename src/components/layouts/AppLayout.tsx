@@ -52,7 +52,7 @@ export function AppLayout() {
     const code = searchCode.trim();
     if (!code) return;
     try {
-      const res = await getShops(code).unwrap();
+      const res = await getShops({ districtCode: code, Category: null }).unwrap();
       if (res && res.length > 0) {
         changeLocation(code, `${code.toUpperCase()} (Searched)`);
         locationSheet.close();

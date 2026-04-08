@@ -23,15 +23,16 @@ export function Home() {
   const { data: banners, isLoading: bannersLoading } = useGetBannersQuery(districtCode, { skip });
   const { data: categories, isLoading: catsLoading } = useGetCategoriesQuery();
   const { data: merchants, isLoading: merchantsLoading } = useGetMerchantsQuery(districtCode, { skip });
-  const { data: shops, isLoading: shopsLoading } = useGetShopsQuery(districtCode, { skip });
-
+  
   const selectedCat = categories?.find((c) => c.slug === selectedCategory);
-  const filteredShops =
-    selectedCategory === 'all'
-      ? (shops ?? [])
-      : (shops ?? []).filter((s) =>
-          selectedCat ? s.category.toLowerCase() === selectedCat.name.toLowerCase() : true,
-        );
+  const categoryPayload = selectedCategory === 'all' || !selectedCat ? null : [selectedCat.name];
+  
+  const { data: shops, isLoading: shopsLoading } = useGetShopsQuery(
+    { districtCode, Category: categoryPayload },
+    { skip }
+  );
+
+  const filteredShops = shops ?? [];
 
   return (
     <PageWrapper>

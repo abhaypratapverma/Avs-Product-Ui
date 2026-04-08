@@ -24,6 +24,16 @@ async function axiosFetch<T>(url: string): Promise<{ data: T } | { error: { mess
   }
 }
 
+async function axiosPost<T>(url: string, body: unknown): Promise<{ data: T } | { error: { message: string; statusCode: number; errors: string[] } }> {
+  try {
+    const res = (await axiosInstance.post<T>(url, body)) as unknown as T;
+    return { data: res };
+  } catch (e) {
+    const err = e as { message?: string };
+    return { error: { message: err.message ?? 'Request failed', statusCode: 0, errors: [] } };
+  }
+}
+
 export const homeApi = createApi({
   reducerPath: 'homeApi',
   baseQuery: fakeBaseQuery(),
@@ -42,12 +52,19 @@ export const homeApi = createApi({
         };
       },
     }),
-    getShops: builder.query<Store[], string>({
-      queryFn: async (districtCode) => {
+    getShops: builder.query<Store[], { districtCode: string; Category: string[] | null }>({
+      queryFn: async ({ districtCode, Category }) => {
         if (USE_MOCK) {
-          return { data: MOCK_STORES.filter((s) => s.districtCode === districtCode || districtCode === '') };
+          return {
+            data: MOCK_STORES.filter((s) => {
+              const districtMatch = s.districtCode === districtCode || districtCode === '';
+              const categoryMatch = !Category || Category.length === 0 || Category.some((c) => s.category.toLowerCase() === c.toLowerCase());
+              return districtMatch && categoryMatch;
+            }),
+          };
         }
-        const result = await axiosFetch<unknown[]>(ENDPOINTS.home.shops(districtCode));
+        const payload = { districtCode, Category };
+        const result = await axiosPost<unknown[]>(ENDPOINTS.home.shops, payload);
         if ('error' in result) return result;
         const rows = Array.isArray(result.data) ? result.data : [];
         return { data: rows.map((row) => mapApiShopToStore(row as Record<string, unknown>)) };
