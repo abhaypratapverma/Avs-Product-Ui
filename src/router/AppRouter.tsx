@@ -33,7 +33,7 @@ const ProtectedHome       = withLocation(withGuestAccess(Home));
 const ProtectedExplore    = withLocation(withGuestAccess(Explore));
 const ProtectedSearch     = withLocation(withGuestAccess(Search));
 const ProtectedStoreDetail = withLocation(withGuestAccess(StoreDetail));
-const ProtectedCart       = withLocation(withAuth(Cart));
+const ProtectedCart       = withLocation(withGuestAccess(Cart));
 const ProtectedOrders     = withAuth(Orders);
 const ProtectedOrderDetail = withAuth(OrderDetail);
 const ProtectedProfile    = Profile;
@@ -50,6 +50,8 @@ export function AppRouter() {
         <Route path={ROUTES.login}         element={<Login />} />
         <Route path={ROUTES.register}      element={<Register />} />
         <Route path={ROUTES.profileSetup}  element={<ProfileSetup />} />
+
+        <Route path="/" element={<Navigate to={ROUTES.home} replace />} />
 
         {/* ── MAIN APP (with layout) ── */}
         <Route element={<AppLayout />}>

@@ -75,7 +75,7 @@ export function Cart() {
         </div>
       </div>
 
-      <div className="px-4 py-4 flex flex-col gap-4 pb-32">
+      <div className="px-4 py-4 flex flex-col gap-4 pb-[calc(68px+6.5rem+env(safe-area-inset-bottom,0px))]">
         {/* Cart Items */}
         <div className="flex flex-col gap-3">
           {items.map((item) => (
@@ -106,8 +106,8 @@ export function Cart() {
         </div>
       </div>
 
-      {/* Place Order CTA */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white border-t border-border p-4 z-20">
+      {/* Place Order CTA — above BottomNav (z-30); matches CartPreviewBar offset */}
+      <div className="fixed bottom-[68px] left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white border-t border-border z-20 px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
         <Button
           size="lg"
           fullWidth

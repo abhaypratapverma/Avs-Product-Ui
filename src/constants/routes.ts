@@ -5,7 +5,7 @@ export const ROUTES = {
   login:             '/login',
   register:          '/register',
   profileSetup:      '/profile-setup',
-  home:              '/',
+  home:              '/home',
   explore:           '/explore',
   search:            '/search',
   storeDetail:       '/stores/:storeId',

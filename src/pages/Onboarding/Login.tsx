@@ -38,9 +38,8 @@ export function Login() {
       const res = await login(data).unwrap();
       dispatch(setAuth({ user: res.user, accessToken: res.accessToken, refreshToken: res.refreshToken }));
       toast.success('Logged in successfully!');
-      
-      // We are skipping the profile setup per user request
-      navigate(ROUTES.locationSetup, { replace: true });
+
+      navigate(returnTo, { replace: true });
     } catch {
       toast.error('Invalid email or password. Please try again.');
     }

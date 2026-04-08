@@ -44,7 +44,7 @@ const SignIn = () => {
       }
 
       // Redirect after success
-      navigate("/");   
+      navigate("/home");
     } catch (err) {
       console.error("Sign in error:", err);
       setError(err.message || "Failed to login");

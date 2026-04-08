@@ -10,11 +10,31 @@ export interface AuthState {
   isGuest: boolean;
 }
 
+const USER_STORAGE_KEY = 'user';
+
+function parseStoredUser(): User | null {
+  try {
+    const raw = localStorage.getItem(USER_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<User>;
+    if (parsed && typeof parsed.id === 'number') {
+      return parsed as User;
+    }
+  } catch {
+    /* ignore corrupt storage */
+  }
+  return null;
+}
+
+const storedAccess = localStorage.getItem('accessToken');
+const storedRefresh = localStorage.getItem('refreshToken');
+
 const initialState: AuthState = {
-  user: null,
-  accessToken: localStorage.getItem('accessToken'),
-  refreshToken: localStorage.getItem('refreshToken'),
-  isAuthenticated: false,
+  user: parseStoredUser(),
+  accessToken: storedAccess,
+  refreshToken: storedRefresh,
+  // Must match token presence — Cart and guards read this, not only localStorage
+  isAuthenticated: Boolean(storedAccess),
   isGuest: false,
 };
 
@@ -32,6 +52,7 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.isGuest = false;
       localStorage.setItem('accessToken', action.payload.accessToken);
+      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(action.payload.user));
     },
     clearAuth(state) {
       state.user = null;
@@ -41,6 +62,7 @@ const authSlice = createSlice({
       state.isGuest = false;
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem(USER_STORAGE_KEY);
     },
     setGuest(state) {
       state.isGuest = true;
