@@ -27,7 +27,7 @@ export const storeApi = createApi({
           return { data: MOCK_STORES.filter((s) => s.districtCode === districtCode || districtCode === '') };
         }
         try {
-          const res = (await axiosInstance.get(ENDPOINTS.home.shops(districtCode))) as unknown;
+          const res = (await axiosInstance.post(ENDPOINTS.home.shops, { districtCode, Category: null })) as unknown;
           const rows = Array.isArray(res) ? res : [];
           const data: Store[] = rows.map((row) => mapApiShopToStore(row as Record<string, unknown>));
           return { data };
