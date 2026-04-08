@@ -79,6 +79,7 @@ export const homeApi = createApi({
 
 export const {
   useGetBannersQuery,
+  useLazyGetShopsQuery,
   useGetShopsQuery,
   useGetCategoriesQuery,
   useGetMerchantsQuery,

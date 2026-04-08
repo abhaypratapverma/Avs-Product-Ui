@@ -36,7 +36,9 @@ export function BannerCarousel({ banners, isLoading = false }: BannerCarouselPro
 
   if (!banners.length) return null;
 
-  const banner = banners[current];
+  const validCurrent = current < banners.length ? current : 0;
+  const banner = banners[validCurrent];
+  if (!banner) return null;
 
   return (
     <div

@@ -96,12 +96,13 @@ export function StoreCard({ store, variant = 'full', className }: StoreCardProps
           <Badge variant={store.isOpen ? 'open' : 'closed'} />
         </div>
         {/* Heart */}
-        <button
+        <div
+          role="button"
           onClick={(e) => e.stopPropagation()}
-          className="absolute top-2 left-2 w-8 h-8 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-sm active:scale-90 transition-transform"
+          className="absolute top-2 left-2 w-8 h-8 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-sm active:scale-90 transition-transform cursor-pointer"
         >
           <Heart className="w-4 h-4 text-gray-500" />
-        </button>
+        </div>
         {/* Sponsored/Featured badges */}
         {store.isSponsored && (
           <div className="absolute bottom-2 right-2">
