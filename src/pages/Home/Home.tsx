@@ -1,5 +1,5 @@
 // src/pages/Home/Home.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { PageWrapper } from '../../components/layouts/PageWrapper';
@@ -11,12 +11,16 @@ import { Avatar } from '../../components/atoms/Avatar';
 import { SearchBar } from '../../components/molecules/SearchBar';
 import { useGetBannersQuery, useGetCategoriesQuery, useGetMerchantsQuery } from '../../api/services/homeApi';
 import { useGetShopsQuery } from '../../api/services/homeApi';
-import { useAppSelector } from '../../store';
+import { useGetCartQuery } from '../../api/services/storeApi';
+import { useAppSelector, useAppDispatch } from '../../store';
+import { setCart } from '../../store/slices/cartSlice';
 import { ROUTES } from '../../constants/routes';
 
 export function Home() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const districtCode = useAppSelector((s) => s.location.districtCode ?? '');
+  const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const skip = !districtCode;
@@ -31,6 +35,17 @@ export function Home() {
     { districtCode, Category: categoryPayload },
     { skip }
   );
+
+  // Fetch cart data if logged in and address (districtCode) is selected
+  const skipCart = !districtCode || !isAuthenticated;
+  const { data: cartData } = useGetCartQuery(undefined, { skip: skipCart });
+
+  // Sync cart data to central store so UI reflects exact DB state
+  useEffect(() => {
+    if (cartData) {
+      dispatch(setCart(cartData));
+    }
+  }, [cartData, dispatch]);
 
   const filteredShops = shops ?? [];
 

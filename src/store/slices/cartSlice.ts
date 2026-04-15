@@ -142,6 +142,28 @@ const cartSlice = createSlice({
       state.pendingItem = null;
     },
 
+    setCart(state, action: PayloadAction<CartItem[]>) {
+      const items = action.payload;
+      state.items = items;
+      if (items.length > 0) {
+        const newStoreId = items[0].storeId;
+        const newStoreName = items[0].storeName;
+        state.storeId = newStoreId;
+        if (newStoreName) {
+          state.storeName = newStoreName;
+        } else if (state.storeId !== newStoreId) {
+          state.storeName = null;
+        }
+      } else {
+        state.storeId = null;
+        state.storeName = null;
+      }
+      const { totalItems, totalAmount } = recalculate(items);
+      state.totalItems = totalItems;
+      state.totalAmount = totalAmount;
+      persist(state);
+    },
+
     clearCart(state) {
       state.items = [];
       state.storeId = null;
@@ -154,5 +176,5 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addItem, removeItem, updateQuantity, replaceCart, dismissPendingItem, clearCart } = cartSlice.actions;
+export const { addItem, removeItem, updateQuantity, replaceCart, dismissPendingItem, setCart, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -22,10 +22,10 @@ export const ENDPOINTS = {
     productsByStoreId: (storeId: number) => `/customer/${storeId}/products`,
   },
   cart: {
-    get:        '/cart',
-    addItem:    '/cart/items',
-    updateItem: (id: number) => `/cart/items/${id}`,
-    removeItem: (id: number) => `/cart/items/${id}`,
+    get:        '/customer/cart/items/get',
+    add:        '/customer/cart/items/update', // POST to add/increment item
+    updateQty:  '/customer/cart/items/update-quantity', // PUT to set absolute quantity
+    remove:     '/customer/cart/items/remove', // POST to remove item
     clear:      '/cart/clear',
   },
   orders: {
